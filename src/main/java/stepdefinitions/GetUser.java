@@ -26,7 +26,7 @@ public class GetUser {
     @When("I pass the url in as request with username")
     public void i_pass_the_url_in_as_request_with_username() {
         httpRequest = RestAssured.given();
-        response = httpRequest.get("user/krishan");
+        response = httpRequest.get("user/user1");
     }
 
     @Then("I get the response code as {int}")
@@ -35,12 +35,11 @@ public class GetUser {
         assertEquals(ResponseCode, 200);
     }
 
-    @Then("I verify the UserName of given user <username>")
-    public void iVerifyTheUserNameOfGivenUserUsername() {
-        body = response.getBody();
-        String responseBody = body.asString();
-        JsonPath js = new JsonPath(responseBody); // Initialize JsonPath with the response body
-        String username = js.getString("username"); // Use getString instead of getJsonObject
-        assertEquals("krishan", username);
+    @Then("I verify the UserName of given user {string}")
+    public void iVerifyTheUserNameOfGivenUser(String expectedUsername) {
+        String body = response.getBody().asString();
+        JsonPath js = new JsonPath(body); // Initialize JsonPath with the response body
+        String actualUsername = js.getString("username");
+        assertEquals(expectedUsername, actualUsername);
     }
 }
